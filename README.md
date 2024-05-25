@@ -141,3 +141,10 @@ was used to benchmark each routine. The caches were flushed before each run with
 sync && echo 3 >| /proc/sys/vm/drop_caches
 ```
 
+The benchmarks were conducted on a Linux virtual machine. As per `neofetch`'s
+output:
+
+```none
+CPU: Intel i5-8350U (2) @ 1.895GHz
+Memory: 454MiB / 2933MiB
+```
