@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+set -e 
+
+RED=$(printf "\033[0;31m")
+ENDCOLOR=$(printf "\033[0m")
+
+if [ "$USER" != "root" ]; then
+	printf "%sError: must be root! Exiting...%s\n" "$RED" "$ENDCOLOR" 
+	exit 1
+fi
+
+drop_caches() 
+{
+    # Force the redirection even if noclobber is set.
+    sync && echo 3 >| /proc/sys/vm/drop_caches 
+}
+
+write_stats()
+{
+    file="$1"
+    a=($(LC_ALL=C wc -lw "$file"))
+    lines="${a[0]}"
+    words="${a[1]}"
+    size=$(du -sh "$file" | cut -f1)
+
+    printf "%s: L:%s W:%s %s\n" "$(basename "$file")" "$lines" "$words" "$size"
+    drop_caches
+    printf "    %s getline\n" "$(./read_file --getline "$file")" 
+    drop_caches
+    printf "    %s mmap_getline\n" "$(./read_file --mmap_getline "$file")"
+    drop_caches
+    printf "    %s mmap_memchr\n" "$(./read_file --mmap_memchr "$file")"
+    drop_caches
+    printf "    %s fread\n\n" "$(./read_file --fread "$file")"
+}
+
+for f in data/*; do
+    if [ -f "$f" ]; then
+        write_stats "$f"
+    fi
+done

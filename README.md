@@ -133,8 +133,11 @@ F_20: L:233854 W:231300 292M
     2.588875s fread
 ```
 
-[benchmark](benchmark.bash) was used to benchmark each routine. The caches were flushed before each run with:
+[gen_files](gen_files) was used to generate the files (a script borrowed from
+@CraigEstey on StackOverflow), and [benchmark](benchmark) 
+was used to benchmark each routine. The caches were flushed before each run with:
 
 ```shell
 sync && echo 3 >| /proc/sys/vm/drop_caches
 ```
+

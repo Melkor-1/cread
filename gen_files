@@ -1,0 +1,296 @@
+#!/usr/bin/perl
+
+# grpcntgen -- generate test data for fastread algorithms
+#
+# arguments:
+#   "-W" - maximum line width
+#   "-L" - maximum number of lines
+#   "-T" - number of test files to generate
+#   "-O" - output file (e.g. foo%.txt)
+#
+# NOTE: with no arguments or missing arguments will prompt
+
+#pragma pgmlns
+# tstgen -- test generation help routines
+
+# gengetstr -- get a string/number
+sub gengetstr
+{
+    my($numflg,$opt,$prompt,$lim) = @_;
+    my($arg);
+    my($askflg);
+    my($val);
+
+    select(STDOUT);
+    $| = 1;
+
+    {
+        # search command line for -whatever
+        foreach $arg (@argv) {
+            if ($arg =~ /^$opt(.*)$/) {
+                $val = $1;
+                if ($numflg && ($val eq "")) {
+                    $val = $lim;
+                    $val //= 1;
+                }
+                last;
+            }
+        }
+        last if (defined($val));
+
+        $askflg = 1;
+
+        while (1) {
+            printf("Enter ")
+                if ($numflg != 1);
+
+            printf("%s",$prompt);
+
+            if ($numflg == 1) {
+                printf(" (0/1)? ");
+            }
+            else {
+                printf(": ");
+            }
+
+            $val = <STDIN>;
+            chomp($val);
+
+            if ($numflg == 0) {
+                last if ($val ne "");
+                next;
+            }
+
+            # an empty response for a number with a maximum means use it
+            if (($numflg == 2) && ($val eq "") && defined($lim)) {
+                $val = $lim;
+                last;
+            }
+
+            next unless ($val =~ /^\d+$/);
+
+            $val += 0;
+
+            last if ($numflg == 1);
+
+            next if ($val <= 0);
+            last unless (defined($lim));
+            last if ($val <= $lim);
+        }
+    }
+
+    unless ($askflg) {
+        printf("%s: %s\n",$prompt,$val);
+    }
+
+    $val;
+}
+
+# genrun -- generate all tests
+sub genrun
+{
+    local(@argv) = @_;
+    local($ofile,$tstmax,$tstproc);
+    local($tstcur);
+    local($splitflg);
+    local($genvbq);
+    my($sym);
+    my($numfmt);
+    my($xfile);
+
+    $genvbq = genvbq(\@argv);
+
+    $ofile = shift(@argv);
+    $tstmax = shift(@argv);
+    $tstproc = shift(@argv);
+
+    # split each test into separate file
+    if ($ofile =~ /%/) {
+        $splitflg = 1;
+        $numfmt = sprintf("%d",$tstmax);
+        $numfmt = length($numfmt);
+        $numfmt = sprintf("_%%%d.%dd",$numfmt,$numfmt);
+        $ofile =~ s/%/$numfmt/;
+        ###die("genrun: DEBUG_CAE numfmt='$numfmt' ofile='$ofile'\n");
+    }
+
+    {
+        last if ($splitflg);
+        genopen($ofile);
+    }
+
+    for ($tstcur = 1;  $tstcur <= $tstmax;  ++$tstcur) {
+        {
+            last unless ($splitflg);
+            $xfile = sprintf($ofile,$tstcur);
+            genopen($xfile);
+        }
+
+        &$tstproc();
+
+        {
+            last unless ($splitflg);
+            genclose();
+        }
+    }
+
+    {
+        last if ($splitflg);
+        genclose();
+    }
+}
+
+# genvbq -- get options
+sub genvbq
+{
+    my($argv) = @_;
+    my($sym);
+    my($env);
+
+    $env = {};
+
+    while (1) {
+        $sym = $argv->[0];
+        last unless ($sym =~ s/^-//);
+        shift(@$argv);
+
+        if ($sym =~ /^([^=]+)=(.+)$/) {
+            ($sym,$val) = ($1,$2);
+        }
+        else {
+            $val = 1;
+        }
+
+        $env->{$sym} = $val;
+    }
+
+    $env;
+}
+
+# genopen -- open output
+sub genopen
+{
+    my($ofile) = @_;
+
+    $gen_ofile = $ofile;
+
+    {
+        last if ($genvbq->{"n"});
+        last if (open($xfdst,">$ofile"));
+        die("genopen: unable to open '$ofile' -- $!\n");
+    }
+}
+
+# genclose -- close output
+sub genclose
+{
+
+    close($xfdst);
+}
+
+# geninit -- initialize for single test
+sub geninit
+{
+
+    undef($genout_lhs);
+    undef($genout_pre);
+}
+
+# genout -- output data
+sub genout
+{
+    my($rhs) = @_;
+
+    {
+        if (defined($rhs)) {
+            last if ((length($genout_pre) + length($genout_lhs) +
+                length($rhs)) < 78);
+        }
+
+        last if ($genout_lhs eq "");
+
+        print($xfdst $genout_pre,$genout_lhs,"\n");
+        undef($genout_lhs);
+    }
+
+    $genout_lhs .= $rhs
+        if (defined($rhs));
+}
+
+# genrand -- get random number
+sub genrand
+{
+    my($lim) = @_;
+    my($val);
+
+    $val = int(rand($lim));
+    $val += 1;
+
+    $val;
+}
+
+# genfmtof -- get number format
+sub genfmtof
+{
+    my($num) = @_;
+    my($fmt);
+
+    $fmt = sprintf("%d",$num);
+    $fmt = length($fmt);
+    $fmt = sprintf(" %%%dd",$fmt);
+
+    $fmt;
+}
+
+1;
+
+master(@ARGV);
+exit(0);
+
+# master -- master control
+sub master
+{
+    local(@argv) = @_;
+
+    $Wmax = gengetstr(2,"-W","maximum line width");
+    $Lmax = gengetstr(2,"-L","maximum number of lines / file");
+    $tstmax = gengetstr(2,"-T","number of tests");
+
+    while (1) {
+        $ofile = gengetstr(0,"-O","output file name");
+        last if ($ofile =~ /%/);
+        printf("fastreadgen: filename must have %% in it (e.g. foo%%.txt)\n");
+    }
+
+    genrun($ofile,$tstmax,\&dotest);
+}
+
+# dotest -- generate a test
+sub dotest
+{
+    my($lno,$chroff);
+    my($lhs);
+
+    $Wlim = genrand($Wmax);
+    $Llim = genrand($Lmax);
+
+    printf("dotest: T=%d/%d W=%d L=%d\n",$tstcur,$tstmax,$Wlim,$Llim);
+
+    for ($lno = 1;  $lno <= $Llim;  ++$lno) {
+        $Wcur = genrand($Wlim);
+        $Wcur -= 1;
+
+        undef($lhs);
+        for (;  $Wcur > 0;  --$Wcur) {
+            $chroff = genrand(0x7E - 0x20);
+            $chroff += 0x20;
+            $chroff -= 1;
+            $chroff = chr($chroff);
+            last;
+            $lhs .= $chroff;
+        }
+        $lhs = $chroff x $Wcur;
+
+        print($xfdst $lhs,"\n");
+    }
+}
