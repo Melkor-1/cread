@@ -11,10 +11,10 @@
 #include <sys/time.h>
 
 #include "readlines_fread.h"
-#include "readlines_read.h"
-#include "readlines_mmap_memchr.h"
-#include "readlines_mmap_getline.h"
 #include "readlines_getline.h"
+#include "readlines_mmap_getline.h"
+#include "readlines_mmap_memchr.h"
+#include "readlines_read.h"
 
 typedef uint64_t timestamp_t;
 

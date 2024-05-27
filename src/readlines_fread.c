@@ -1,14 +1,15 @@
 #define _POSIX_C_SOURCE 2008'09L
 #define _XOPEN_SOURCE   700
 
+#include "readlines_fread.h"
+
 #include <stdio.h>
 #include <string.h>
 
-#include <sys/mman.h>
 #include <fcntl.h>
+#include <sys/mman.h>
 
 #include "common.h"
-#include "readlines_fread.h"
 
 /* Reads the next chunk of data from the stream referenced to by `stream`.
  * `chunk` must be a pointer to an array of size `size`. 

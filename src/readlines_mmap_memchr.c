@@ -1,15 +1,16 @@
 #define _POSIX_C_SOURCE 2008'09L
 #define _XOPEN_SOURCE   700
 
+#include "readlines_mmap_memchr.h"
+
 #include <stdlib.h>
 #include <string.h>
 
-#include <sys/stat.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #include "common.h"
-#include "readlines_mmap_memchr.h"
 
 bool readlines_mmap_memchr(FILE *stream, FileBuf fbuf[static 1])
 {

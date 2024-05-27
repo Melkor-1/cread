@@ -1,14 +1,15 @@
 #define _POSIX_C_SOURCE 2008'09L
 #define _XOPEN_SOURCE   700
 
+#include "readlines_mmap_getline.h"
+
 #include <stdio.h>
 
-#include <sys/stat.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #include "common.h"
-#include "readlines_mmap_getline.h"
 #include "readlines_getline.h"
 
 bool readlines_mmap_getline(FILE *stream, FileBuf fbuf[static 1])

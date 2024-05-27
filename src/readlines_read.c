@@ -1,16 +1,17 @@
 #define _POSIX_C_SOURCE 2008'09L
 #define _XOPEN_SOURCE   700
 
+#include "readlines_read.h"
+
 #include <stdio.h>
 #include <string.h>
 
+#include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/types.h>
-#include <fcntl.h>
 #include <unistd.h>
 
 #include "common.h"
-#include "readlines_read.h"
 
 /* Reads as many bytes as possible, up to `buf_size` bytes, from file descriptor
  * `fd` into buffer `buf`. 
