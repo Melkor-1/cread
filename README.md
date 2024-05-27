@@ -2,10 +2,10 @@
 
 ### Routines:
 
-* `getlines_mmap_memchr()`  - Memory-maps the file and replaces all newlines with null bytes whilst keeping track of the beginning of the lines. 
-* `getlines_mmap_getline()` - Memory-maps the file, opens a stream on the mapped file with `fmemstream()`, and uses `getlines_getline()` to read from it.
-* `getlines_getline()`      - Reads from a stream line by line with `getline()`.
-* `getlines_fread`          - Reads from stream in chunks (64K-256K depending on the size of `size_t`).
+* `readlines_mmap_memchr()`  - Memory-maps the file and replaces all newlines with null bytes whilst keeping track of the beginning of the lines. 
+* `readlines_mmap_getline()` - Memory-maps the file, opens a stream on the mapped file with `fmemstream()`, and uses `readlines_getline()` to read from it.
+* `readlines_getline()`      - Reads from a stream line by line with `getline()`.
+* `readlines_fread`          - Reads from stream in chunks (64K-256K depending on the size of `size_t`).
 
 ### Benchmarks:
 
