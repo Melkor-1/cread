@@ -5,7 +5,8 @@
 * `readlines_mmap_memchr()`  - Memory-maps the file and replaces all newlines with null bytes whilst keeping track of the beginning of the lines. 
 * `readlines_mmap_getline()` - Memory-maps the file, opens a stream on the mapped file with `fmemstream()`, and uses `readlines_getline()` to read from it.
 * `readlines_getline()`      - Reads from a stream line by line with `getline()`.
-* `readlines_fread`          - Reads from stream in chunks (64K-256K depending on the size of `size_t`).
+* `readlines_fread()`        - Reads from stream in chunks (64K-256K depending on the size of `size_t`).
+* `readlines_read()`         - Reads from file descriptor in chunks (64K-256K depending on the size of `size_t`).
 
 ### Benchmarks:
 
@@ -153,3 +154,6 @@ output:
 CPU: Intel i5-8350U (2) @ 1.895GHz
 Memory: 454MiB / 2933MiB
 ```
+
+`readlines_read()` was added later and has not been benchmarked with the rest
+of the read routines yet.
