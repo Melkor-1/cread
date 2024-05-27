@@ -56,9 +56,6 @@ bool readlines_fread(FILE *stream, FileBuf fbuf[static 1])
     char chunk[CHUNK_SIZE];
     size_t nread; 
     size_t remain = 0;
-    size_t line_len= 0;
-    char *lhs;
-    char *rhs;
 
     while (nread = read_next_chunk(stream, CHUNK_SIZE - remain, chunk + remain)) {
         fbuf->size += nread;
@@ -66,7 +63,7 @@ bool readlines_fread(FILE *stream, FileBuf fbuf[static 1])
         remain = 0;         /* Reset remain for the current iteration. */
 
 
-        for (lhs = chunk; lhs < &chunk[nread]; lhs = rhs + 1) {
+        for (char *lhs = chunk, *rhs; lhs < &chunk[nread]; lhs = rhs + 1) {
             rhs = memchr(lhs, '\n', (size_t) (&chunk[nread] - lhs));
 
             if (rhs == nullptr) {
@@ -78,25 +75,19 @@ bool readlines_fread(FILE *stream, FileBuf fbuf[static 1])
                 break;
             }
 
-            line_len = (size_t) (rhs - lhs);
-
-            if (fbuf->capacity <= fbuf->count) {
-                if (!resize_fbuf(fbuf)) {
-                    goto cleanup_and_fail;
-                }
+            if ((fbuf->capacity <= fbuf->count) || !resize_fbuf(fbuf)) {
+                goto cleanup_and_fail;
             }
 
-            if (!alloc_and_append_line(fbuf, line_len, lhs)) {
+            if (!alloc_and_append_line(fbuf, (size_t) (rhs - lhs), lhs)) {
                 goto cleanup_and_fail; 
             }
         }
     }
     
     if (remain) {
-        if (fbuf->capacity <= fbuf->count) {
-            if (!resize_fbuf(fbuf)) {
-                goto cleanup_and_fail;
-            }
+        if ((fbuf->capacity <= fbuf->count) || !resize_fbuf(fbuf)) {
+            goto cleanup_and_fail;
         }
 
         if (!alloc_and_append_line(fbuf, remain, chunk)) {
