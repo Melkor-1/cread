@@ -53,10 +53,10 @@ $(TARGET): $(SRCS)
 	$(CC) $(CFLAGS) -o $@ $^
 
 valgrind: $(TARGET)
-	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_memchr data/F_01
-	valgrind --tool=memcheck --leak-check=yes ./read_file --getline data/F_01
-	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_getline data/F_01
-	valgrind --tool=memcheck --leak-check=yes ./read_file --fread data/F_01
+	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_memchr data/F_01.txt
+	valgrind --tool=memcheck --leak-check=yes ./read_file --getline data/F_01.txt
+	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_getline data/F_01.txt
+	valgrind --tool=memcheck --leak-check=yes ./read_file --fread data/F_01.txt
 
 benchmark: $(TARGET)
 	./benchmark > log.txt
