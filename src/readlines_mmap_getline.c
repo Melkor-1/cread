@@ -48,12 +48,10 @@ bool readlines_mmap_getline(FILE *stream, FileBuf fbuf[static 1])
 
     /* Ignore errors on read-only file. */
     munmap(map, (size_t) st.st_size);
-
     fclose(memstream);
 
     /* Trim to maximum used. */
     fbuf->lines = safe_trim(fbuf->lines, fbuf->count * sizeof fbuf->lines[0]);
-
     return true;
 }
 

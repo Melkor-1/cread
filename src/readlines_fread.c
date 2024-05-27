@@ -63,7 +63,6 @@ bool readlines_fread(FILE *stream, FileBuf fbuf[static 1])
         nread += remain;    /* Include remaining bytes from the previous read. */
         remain = 0;         /* Reset remain for the current iteration. */
 
-
         for (char *lhs = chunk, *rhs; lhs < &chunk[nread]; lhs = rhs + 1) {
             rhs = memchr(lhs, '\n', (size_t) (&chunk[nread] - lhs));
 
