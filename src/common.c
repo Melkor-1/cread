@@ -12,7 +12,7 @@
 [[gnu::always_inline]] static inline bool grow_capacity(size_t result[static 1], 
                                                         size_t cap)
 {
-    if (2 > SIZE_MAX / cap) {
+    if (cap != 0 && 2 > SIZE_MAX / cap) {
         return false;
     }
 
