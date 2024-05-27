@@ -44,9 +44,13 @@ CFLAGS += -Wsuggest-attribute=format
 
 RM = /bin/rm
 
+SRCS = $(wildcard src/*.c)
 TARGET = read_file
 
 all: $(TARGET)
+
+$(TARGET): $(SRCS)
+	$(CC) $(CFLAGS) -o $@ $^
 
 valgrind: $(TARGET)
 	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_memchr data/F_01
@@ -54,9 +58,12 @@ valgrind: $(TARGET)
 	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_getline data/F_01
 	valgrind --tool=memcheck --leak-check=yes ./read_file --fread data/F_01
 
+benchmark: $(TARGET)
+	./benchmark > log.txt
+	
 clean:
 	$(RM) $(TARGET)
 
-.PHONY: all clean valgrind
+.PHONY: all clean valgrind benchmark
 .DELETE_ON_ERROR:
 
