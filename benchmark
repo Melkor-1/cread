@@ -6,7 +6,7 @@ RED=$(printf "\033[0;31m")
 ENDCOLOR=$(printf "\033[0m")
 
 if [ "$USER" != "root" ]; then
-	printf "%sError: must be root! Exiting...%s\n" "$RED" "$ENDCOLOR" 
+	printf "%sError: must be root! Exiting...%s\n" "$RED" "$ENDCOLOR" >&2
 	exit 1
 fi
 
