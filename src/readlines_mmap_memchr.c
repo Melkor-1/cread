@@ -33,10 +33,7 @@ bool readlines_mmap_memchr(FILE *stream, FileBuf fbuf[static 1])
 
     posix_madvise(map, (size_t) st.st_size, POSIX_MADV_SEQUENTIAL | POSIX_MADV_WILLNEED);
 
-    char *lhs;
-    char *rhs;
-
-    for (lhs = map; lhs < &map[st.st_size]; lhs = rhs + 1) {
+    for (char *lhs = map, *rhs; lhs < &map[st.st_size]; lhs = rhs + 1) {
         rhs = memchr(lhs, '\n', (size_t) (&map[st.st_size] - lhs));
 
         if (rhs == nullptr) {
@@ -44,10 +41,8 @@ bool readlines_mmap_memchr(FILE *stream, FileBuf fbuf[static 1])
             break;
         }
 
-        if (fbuf->capacity <= fbuf->count) {
-            if (!resize_fbuf(fbuf)) {
-                goto cleanup_and_fail;
-            }
+        if ((fbuf->capacity <= fbuf->count) || !resize_fbuf(fbuf)) {
+            goto cleanup_and_fail;
         }
 
         if (!append_line(fbuf, (size_t) (rhs - lhs), lhs)) {
@@ -57,7 +52,6 @@ bool readlines_mmap_memchr(FILE *stream, FileBuf fbuf[static 1])
 
     /* Trim to maximum used. */
     fbuf->lines = safe_trim(fbuf->lines, fbuf->count * sizeof fbuf->lines[0]);
-
     return true;
 
   cleanup_and_fail:
