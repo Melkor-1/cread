@@ -11,6 +11,7 @@
 #include <sys/time.h>
 
 #include "readlines_fread.h"
+#include "readlines_read.h"
 #include "readlines_mmap_memchr.h"
 #include "readlines_mmap_getline.h"
 #include "readlines_getline.h"
@@ -76,9 +77,14 @@ void print_lines(const FileBuf fbuf[static 1])
         FILE *restrict stream, 
         const char argv0[restrict static 1])
 {
-    fprintf(stream, "Usage: %s OPTIONS FILE.\n"
-                    "OPTION: --fread, --mmap_getline, --mmap_memchr, --getline.\n",
-                    argv0);
+    fprintf(stream, "\nUsage: %s OPTIONS FILE.\n\n"
+            "OPTIONS:\n"
+            "   --fread\n"
+            "   --mmap_getline\n"
+            "   --mmap_memchr\n"
+            "   --getline.\n"
+            "   --read\n",
+            argv0);
 }
 
 int main(int argc, char *argv[])
@@ -105,6 +111,9 @@ int main(int argc, char *argv[])
     } else if (strcmp(argv[1], "--fread") == 0) {
         read_fn = readlines_fread;
         free_fn = readlines_fread_cleanup;
+    } else if (strcmp(argv[1], "--read") == 0) {
+        read_fn = readlines_read;
+        free_fn = readlines_read_cleanup;
     } else {
         fprintf(stderr, "Unknown option: \"%s\".\n", argv[1]);
         usage(stderr, argv[0]);
