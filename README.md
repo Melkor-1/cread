@@ -135,7 +135,12 @@ F_20: L:233854 W:231300 292M
 
 [gen_files](gen_files) was used to generate the files (a script borrowed from
 @CraigEstey on StackOverflow), and [benchmark](benchmark) 
-was used to benchmark each routine. The caches were flushed before each run with:
+was used to benchmark each routine. Due to the large size, the `/data` directory
+that the [Makefile][Makefile] and [benchmakr](benchmark) expect is not present 
+in this repository. It should be trivial to replicate a similar or larger data-set
+given that the repository contains [gen_files](gen_files). 
+
+The caches were flushed before each run with:
 
 ```shell
 sync && echo 3 >| /proc/sys/vm/drop_caches
