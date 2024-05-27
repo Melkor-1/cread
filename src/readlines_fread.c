@@ -75,7 +75,7 @@ bool readlines_fread(FILE *stream, FileBuf fbuf[static 1])
                 break;
             }
 
-            if ((fbuf->capacity <= fbuf->count) || !resize_fbuf(fbuf)) {
+            if ((fbuf->capacity <= fbuf->count) && !resize_fbuf(fbuf)) {
                 goto cleanup_and_fail;
             }
 
@@ -86,7 +86,7 @@ bool readlines_fread(FILE *stream, FileBuf fbuf[static 1])
     }
     
     if (remain) {
-        if ((fbuf->capacity <= fbuf->count) || !resize_fbuf(fbuf)) {
+        if ((fbuf->capacity <= fbuf->count) && !resize_fbuf(fbuf)) {
             goto cleanup_and_fail;
         }
 
