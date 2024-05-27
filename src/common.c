@@ -4,24 +4,19 @@
 
 #include "common.h"
 
-/* If cap is less than 8, bumps it up to 8 and returns true.
- * Else it returns the result of `cap * 2` in result. 
+/* If `cap` is less than 8, bumps it up to 8 and returns `true`.
+ * Else it stores the result of `cap * 2` in `result`. 
  *
- * The function returns false if the multiplication overflowed, or true
+ * The function returns `false` if the multiplication overflowed, or `true`
  * elsewise. result is not modified in case of an overflow. */ 
-[[gnu::always_inline]] static inline size_t grow_capacity(size_t result[static 1], 
-                                                          size_t cap)
+[[gnu::always_inline]] static inline bool grow_capacity(size_t result[static 1], 
+                                                        size_t cap)
 {
-    if (cap < 8) {
-        *result = 8;
-        return true;
-    }
-    
     if (2 > SIZE_MAX / cap) {
         return false;
     }
 
-    *result = cap * 2;
+    *result = cap < 8 ? 8 : cap * 2;
     return true; 
 }
 
