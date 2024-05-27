@@ -14,12 +14,11 @@ bool readlines_getline(FILE *stream, FileBuf fbuf[static 1])
 {
     posix_fadvise(fileno(stream), 0, 0, POSIX_FADV_SEQUENTIAL | POSIX_FADV_WILLNEED);
 
-    char *line = nullptr;
-    size_t capacity = 0;
-    ssize_t nread = 0;
+    char *line = {};
+    size_t capacity = {};
 
     for (;;) {
-        nread = getline(&line, &capacity, stream);
+        ssize_t nread = getline(&line, &capacity, stream);
 
         if (nread == -1) {
             if (feof(stream)) {
@@ -36,10 +35,8 @@ bool readlines_getline(FILE *stream, FileBuf fbuf[static 1])
             line[--nread] = '\0';
         }
 
-        if (fbuf->capacity <= fbuf->count) {
-            if (!resize_fbuf(fbuf)) {
-                goto cleanup_and_fail;
-            }
+        if ((fbuf->capacity <= fbuf->count) || !resize_fbuf(fbuf)) {
+            goto cleanup_and_fail;
         }
 
         /* Let getline() allocate another buffer. This saves us from making
