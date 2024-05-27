@@ -8,9 +8,9 @@
 /* `stream` should be valid, i.e. associated with a file, and `fbuf` should 
  * point to a valid object of type `FileBuf`.
  *
- * On success, returns true. `mmap_memchr_cleanup()` should be called by the 
- * calling code at some point to clean up all resources associated with this 
- * file.
+ * On success, returns true. The calling code is required to call 
+ * `readlines_mmap_memchr_cleanup()` at some point in the code to release the 
+ * memory associated with the lines.
  *
  * On failure, all resources are released (`stream` is not touched) and `false`
  * is returned. */
