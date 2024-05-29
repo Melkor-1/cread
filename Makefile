@@ -3,7 +3,7 @@ CC = gcc-13
 CFLAGS += -DBENCHMARKING
 
 CFLAGS += -O3
-CFLAGS += -std=c2x
+CFLAGS += -std=gnu2x
 CFLAGS += -s
 CFLAGS += -no-pie
 
@@ -14,7 +14,7 @@ CFLAGS += -fno-omit-frame-pointer
 CFLAGS += -Wall
 CFLAGS += -Wextra
 CFLAGS += -Warray-bounds
-CFLAGS += -Wconversion
+#CFLAGS += -Wconversion
 CFLAGS += -Wformat-signedness
 CFLAGS += -Wno-parentheses
 CFLAGS += -Wpedantic
@@ -22,13 +22,6 @@ CFLAGS += -Wstrict-prototypes
 CFLAGS += -Wwrite-strings
 CFLAGS += -Wno-missing-braces
 CFLAGS += -Wno-missing-field-initializers
-
-CFLAGS += -Wsuggest-attribute=pure
-CFLAGS += -Wsuggest-attribute=const
-CFLAGS += -Wsuggest-attribute=noreturn
-CFLAGS += -Wsuggest-attribute=cold
-CFLAGS += -Wsuggest-attribute=malloc
-CFLAGS += -Wsuggest-attribute=format
 
 # CFLAGS += -fsanitize=address
 # CFLAGS += -fsanitize=undefined
@@ -46,6 +39,9 @@ RM = /bin/rm
 
 SRCS = $(wildcard src/*.c)
 TARGET = read_file
+COMMON_SRC = src/common.c
+TEST_SRCS = $(wildcard test/readlines*.c)
+TEST_BINS = $(patsubst %.c,%,$(TEST_SRCS))
 
 all: $(TARGET)
 
@@ -53,17 +49,29 @@ $(TARGET): $(SRCS)
 	$(CC) $(CFLAGS) -o $@ $^
 
 valgrind: $(TARGET)
-	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_memchr data/F_01.txt
-	valgrind --tool=memcheck --leak-check=yes ./read_file --getline data/F_01.txt
-	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_getline data/F_01.txt
-	valgrind --tool=memcheck --leak-check=yes ./read_file --fread data/F_01.txt
+	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_memchr read_file
+	valgrind --tool=memcheck --leak-check=yes ./read_file --getline read_file
+	valgrind --tool=memcheck --leak-check=yes ./read_file --mmap_getline read_file
+	valgrind --tool=memcheck --leak-check=yes ./read_file --fread read_file
 
 benchmark: $(TARGET)
 	./benchmark > log.txt
 	
+test: $(TEST_BINS)
+	@for test in $(TEST_BINS); do \
+		echo "Running $$test"; \
+		./$$test; \
+	done
+
+$(TEST_BINS): %: %.c $(COMMON_SRC)
+	$(CC) $(CFLAGS) -o $@ $^
+
 clean:
 	$(RM) $(TARGET)
 
-.PHONY: all clean valgrind benchmark
+tclean:
+	$(RM) $(TEST_BINS)
+
+.PHONY: all clean valgrind benchmark test
 .DELETE_ON_ERROR:
 
