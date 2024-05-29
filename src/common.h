@@ -4,17 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef struct line {
-    char *line;
-    size_t size;
-} Line;
-
-typedef struct file_buf {
-    Line *lines;
-    size_t capacity;
-    size_t count;
-    uintmax_t size;
-} FileBuf;
+#include "FileBuf.h"
 
 [[nodiscard, gnu::always_inline, gnu::returns_nonnull, gnu::nonnull]] static
 inline void *safe_trim(void *p, size_t n)

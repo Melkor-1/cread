@@ -1,3 +1,6 @@
+#undef _POSIX_C_SOURCE
+#undef _XOPEN_SOURCE
+
 #define _POSIX_C_SOURCE 2008'09L
 #define _XOPEN_SOURCE   700
 
@@ -12,6 +15,7 @@
 #include <unistd.h>
 
 #include "common.h"
+#include "FileBuf.h"
 
 /* Reads as many bytes as possible, up to `buf_size` bytes, from file descriptor
  * `fd` into buffer `buf`. 

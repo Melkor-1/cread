@@ -1,3 +1,6 @@
+#undef _POSIX_C_SOURCE
+#undef _XOPEN_SOURCE
+
 #define _POSIX_C_SOURCE 2008'09L
 #define _XOPEN_SOURCE   700
 
@@ -10,6 +13,7 @@
 #include <unistd.h>
 
 #include "common.h"
+#include "FileBuf.h"
 #include "readlines_getline.h"
 
 bool readlines_mmap_getline(FILE *stream, FileBuf fbuf[static 1])

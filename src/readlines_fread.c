@@ -1,3 +1,6 @@
+#undef _POSIX_C_SOURCE
+#undef _XOPEN_SOURCE
+
 #define _POSIX_C_SOURCE 2008'09L
 #define _XOPEN_SOURCE   700
 
@@ -10,6 +13,7 @@
 #include <sys/mman.h>
 
 #include "common.h"
+#include "FileBuf.h"
 
 /* Reads the next chunk of data from the stream referenced to by `stream`.
  * `chunk` must be a pointer to an array of size `size`. 
