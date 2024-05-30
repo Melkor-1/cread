@@ -1,22 +1,21 @@
 #include <stdio.h>
 
-#include <sys/mman.h>
-#include <sys/stat.h>
 #include <sys/types.h>
 
-#include "../src/common.h"
-
 #ifdef RESIZE_FBUF
+    #include "../src/common.h"
     #define resize_fbuf              resize_fbuf_stub
     bool resize_fbuf_stub(FileBuf *) { return false; }
 #endif  /* RESIZE_FBUF */
 
 #ifdef ALLOC_AND_APPEND_LINE   
+    #include "../src/common.h"
     #define alloc_and_append_line   alloc_and_append_line_stub
     bool alloc_and_append_line_stub(FileBuf *, size_t, char *) { return false; }
 #endif /* ALLOC_AND_APPEND_LINE */
 
 #ifdef APPEND_LINE             
+    #include "../src/common.h"
     #define append_line             append_line_stub
     bool append_line_stub(FileBuf *, size_t, char *) { return false; }
 #endif /* APPEND_LINE */
@@ -37,11 +36,13 @@
 #endif /* GETLINE */
 
 #ifdef FSTAT                   
+    #include <sys/stat.h>
     #define fstat                   fstat_stub
     int fstat_stub(int, struct stat *) { return -1; }
 #endif /* FSTAT */
 
 #ifdef MMAP                    
+    #include <sys/mman.h>
     #define mmap                    mmap_stub
     void *mmap_stub(void *, size_t, int, int, int, off_t ) { return MAP_FAILED; }
 #endif /* MMAP */
