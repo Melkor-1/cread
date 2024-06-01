@@ -62,7 +62,7 @@ bool readlines_fread(FILE *stream, FileBuf fbuf[static 1])
     size_t nread; 
     size_t remain = 0;
 
-    while (nread = read_next_chunk(stream, CHUNK_SIZE - remain, chunk + remain)) {
+    while ((nread = read_next_chunk(stream, CHUNK_SIZE - remain, chunk + remain))) {
         fbuf->size += nread;
         nread += remain;    /* Include remaining bytes from the previous read. */
         remain = 0;         /* Reset remain for the current iteration. */
