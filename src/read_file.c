@@ -86,7 +86,7 @@ void print_lines(const FileBuf fbuf[static 1])
             "   --fread\n"
             "   --mmap_getline\n"
             "   --mmap_memchr\n"
-            "   --getline.\n"
+            "   --getline\n"
             "   --read\n",
             argv0);
 }
