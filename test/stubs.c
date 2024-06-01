@@ -1,36 +1,40 @@
-#include <stdio.h>
-
 #include <sys/types.h>
 
 #ifdef RESIZE_FBUF
     #include "../src/common.h"
+    #include "../src/FileBuf.h"
     #define resize_fbuf              resize_fbuf_stub
     bool resize_fbuf_stub(FileBuf *) { return false; }
 #endif  /* RESIZE_FBUF */
 
 #ifdef ALLOC_AND_APPEND_LINE   
     #include "../src/common.h"
+    #include "../src/FileBuf.h"
     #define alloc_and_append_line   alloc_and_append_line_stub
     bool alloc_and_append_line_stub(FileBuf *, size_t, char *) { return false; }
 #endif /* ALLOC_AND_APPEND_LINE */
 
 #ifdef APPEND_LINE             
     #include "../src/common.h"
+    #include "../src/FileBuf.h"
     #define append_line             append_line_stub
     bool append_line_stub(FileBuf *, size_t, char *) { return false; }
 #endif /* APPEND_LINE */
 
 #ifdef FEOF                    
+    #include <stdio.h>
     #define feof                    feof_stub
     int feof_stub(FILE *) { return 0; }
 #endif /* FEOF */
 
 #ifdef FILENO                  
+    #include <stdio.h>
     #define fileno                  fileno_stub
     int fileno_stub(FILE *) { return -1; }
 #endif /* FILENO */
 
 #ifdef GETLINE                 
+    #include <stdio.h>
     #define getline                 getline_stub
     ssize_t getline_stub(char **, size_t *, FILE *) { return -1; }
 #endif /* GETLINE */
@@ -48,6 +52,7 @@
 #endif /* MMAP */
 
 #ifdef FMEMOPEN                
+    #include <stdio.h>
     #define fmemopen                fmemopen_stub
     FILE *fmemopen_stub(void *, size_t, const char *) { return nullptr; }
 #endif /* FMEMOPEN */
