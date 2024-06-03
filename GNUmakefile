@@ -47,6 +47,13 @@ ifneq ($(findstring release,$(MAKECMDGOALS)),)
 	CFLAGS += -s
 endif
 
+ifneq ($(findstring benchmark,$(MAKECMDGOALS)),)
+	CFLAGS += -pedantic
+	CFLAGS += -O3
+	CFLAGS += -march=native
+	CFLAGS += -s
+endif
+
 ifneq ($(findstring test,$(MAKECMDGOALS)),)
 	CFLAGS += -Wall
 	CFLAGS += -Wextra
