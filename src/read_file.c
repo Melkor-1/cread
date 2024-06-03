@@ -27,27 +27,6 @@ typedef uint64_t timestamp_t;
     return mcs / 1'000'000.0;
 }
 
-#ifndef BENCHMARKING
-void print_lines(const FileBuf fbuf[static 1])
-{
-    for (size_t i = 0; i < fbuf->count; i++) {
-        puts(fbuf->lines[i].line);
-    }
-}
-
-[[gnu::always_inline, gnu::pure]] static inline size_t get_total_lines(
-        const FileBuf fbuf[static 1])
-{
-    return fbuf->count;
-}
-
-[[gnu::always_inline, gnu::pure]] static inline size_t get_total_bytes(
-        const FileBuf fbuf[static 1])
-{
-    return fbuf->size;
-}
-#endif
-
 [[gnu::always_inline]] static inline timestamp_t get_posix_clock_time_fallback(void)
 {
     struct timeval tv;
@@ -142,15 +121,7 @@ int main(int argc, char *argv[])
 
     const timestamp_t msecs = get_clock_difftime(t0, get_posix_clock_time());
     
-#ifndef BENCHMARKING 
-    print_lines(&fbuf);
-    fprintf(stderr, "Read %ju lines, %ju bytes in: %f secs.\n", 
-                    get_total_lines(&fbuf),
-                    get_total_bytes(&fbuf),
-                    mcs_to_secs((double) msecs));
-#else
     printf("%fs", mcs_to_secs((double) msecs));
-#endif
     free_fn(&fbuf);
     fclose(stream);
     return EXIT_SUCCESS;
