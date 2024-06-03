@@ -12,33 +12,36 @@
 #include "cread/src/FileBuf.h"
 
 #ifdef WITH_FREAD
-    #define TESTME  fread
+    #define TESTME  readlines_fread
     #include "cread/src/readlines_fread.h"
 #elifdef WITH_GETLINE
-    #define TESTME  getline
+    #define TESTME  readlines_getline
     #include "cread/src/readlines_getline.h"
 #elifdef WITH_MMAP_GETLINE
-    #define TESTME  mmap_getline
+    #define TESTME  readlines_mmap_getline
     #include "cread//src/readlines_getline.h"
     #include "cread/src/readlines_mmap_getline.h"
 #elifdef WITH_MMAP_MEMCHR
-    #define TESTME  mmap_memchr
+    #define TESTME  readlines_mmap_memchr
     #include "cread/src/readlines_mmap_memchr.h"
 #elifdef WITH_READ
-    #define TESTME  read
+    #define TESTME  readlines_read
     #include "cread/src/readlines_read.h"
+#else
+    #error "You need to specify one of WITH_FREAD, WITH_GETLINE,"
+           "WITH_MMAP_GETLINE, WITH_MMAP_MEMCHR, or WITH_READ."
 #endif
 
-#define INDIRECT(x)     #x
-#define STRINGIFY(x)    INDIRECT(x)
+#define STRINGIFY_INDIRECT(x)   #x
+#define STRINGIFY(x)            STRINGIFY_INDIRECT(x)
+
+#define CONCAT_INDIRECT2(a, b)  a ## b 
+#define CONCAT2(a, b)           CONCAT_INDIRECT2(a, b)
 
 #define CONCAT_INDIRECT3(a, b, c)   a ## b ## c
 #define CONCAT3(a, b, c)            CONCAT_INDIRECT3(a, b, c)
 
-#define CONCAT_INDIRECT2(a, b)      a ## b 
-#define CONCAT2(a, b)               CONCAT_INDIRECT2(a, b)
-
-void CONCAT3(test_readlines_, TESTME, _success)(void)
+void CONCAT3(test_, TESTME, _success)(void)
 {
     /* The lines and line lengths are at most 1024 in sample1.txt. */
     char buf[1024];
@@ -58,7 +61,7 @@ void CONCAT3(test_readlines_, TESTME, _success)(void)
 
     FileBuf fbuf = {};
 
-    TEST_CHECK(CONCAT2(readlines_, TESTME)(fp, &fbuf));
+    TEST_CHECK(TESTME(fp, &fbuf));
     TEST_CHECK(fbuf.count == 555);
     TEST_CHECK(fbuf.size == 120635);
 
@@ -70,6 +73,6 @@ void CONCAT3(test_readlines_, TESTME, _success)(void)
 }
 
 TEST_LIST = {
-    { "test_readlines_"  STRINGIFY(TESTME) "_success",  CONCAT3(test_readlines_, TESTME, _success) },
+    { "test_"  STRINGIFY(TESTME) "_success",  CONCAT3(test_, TESTME, _success) },
     { nullptr, nullptr },
 };
