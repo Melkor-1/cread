@@ -92,8 +92,8 @@ valgrind: clean $(TARGET)
 	valgrind --tool=memcheck --leak-check=yes ./$(TARGET) --fread $(TARGET)
 	valgrind --tool=memcheck --leak-check=yes ./$(TARGET) --read $(TARGET)
 
-benchmark: $(TARGET)
-	./benchmark $(TARGET) > log.txt
+benchmark: clean $(TARGET)
+	./benchmark ./$(TARGET) > log.txt
 
 $(TEST_BIN_DIR): $(OBJS) | $(OBJ_DIR)
 	mkdir -p $(TEST_BIN_DIR)
