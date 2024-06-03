@@ -1,22 +1,28 @@
+#undef _POSIX_C_SOURCE
+#undef _XOPEN_SOURCE
+
+#define _POSIX_C_SOURCE 2008'09L
+#define _XOPEN_SOURCE   700
+
 #include <sys/types.h>
 
 #ifdef RESIZE_FBUF
-    #include "../src/common.h"
-    #include "../src/FileBuf.h"
+    #include "cread/src/common.h"
+    #include "cread/src/FileBuf.h"
     #define resize_fbuf              resize_fbuf_stub
     bool resize_fbuf_stub(FileBuf *) { return false; }
 #endif  /* RESIZE_FBUF */
 
 #ifdef ALLOC_AND_APPEND_LINE   
-    #include "../src/common.h"
-    #include "../src/FileBuf.h"
+    #include "cread/src/common.h"
+    #include "cread/src/FileBuf.h"
     #define alloc_and_append_line   alloc_and_append_line_stub
     bool alloc_and_append_line_stub(FileBuf *, size_t, char *) { return false; }
 #endif /* ALLOC_AND_APPEND_LINE */
 
 #ifdef APPEND_LINE             
-    #include "../src/common.h"
-    #include "../src/FileBuf.h"
+    #include "cread/src/common.h"
+    #include "cread/src/FileBuf.h"
     #define append_line             append_line_stub
     bool append_line_stub(FileBuf *, size_t, char *) { return false; }
 #endif /* APPEND_LINE */

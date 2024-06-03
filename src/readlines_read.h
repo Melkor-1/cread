@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "FileBuf.h"
+#include "cread/src/FileBuf.h"
 
 /* `stream` should be valid, i.e. associated with a file, and `fbuf` should 
  * point to a valid object of type `FileBuf`.

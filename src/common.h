@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "FileBuf.h"
+#include "cread/src/FileBuf.h"
 
 [[nodiscard, gnu::always_inline, gnu::returns_nonnull, gnu::nonnull]] static
 inline void *safe_trim(void *p, size_t n)

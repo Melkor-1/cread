@@ -1,11 +1,17 @@
+#undef _POSIX_C_SOURCE
+#undef _XOPEN_SOURCE
+
+#define _POSIX_C_SOURCE 2008'09L
+#define _XOPEN_SOURCE   700
+
 #include <stdio.h>
 
-#include "acutest.h"
-#include "stubs.c"
+#include "cread/test/acutest.h"
+#include "cread/test/stubs.c"
 
-#include "../src/FileBuf.h"
-#include "../src/readlines_getline.c"
-#include "../src/readlines_mmap_getline.c"
+#include "cread/src/FileBuf.h"
+#include "cread/src/readlines_getline.c"
+#include "cread/src/readlines_mmap_getline.c"
 
 void test_readlines_mmap_getline_failure(void)
 {

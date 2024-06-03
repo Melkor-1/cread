@@ -12,8 +12,8 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 
-#include "common.h"
-#include "FileBuf.h"
+#include "cread/src/common.h"
+#include "cread/src/FileBuf.h"
 
 /* Reads the next chunk of data from the stream referenced to by `stream`.
  * `chunk` must be a pointer to an array of size `size`. 

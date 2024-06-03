@@ -1,26 +1,32 @@
+#undef _POSIX_C_SOURCE
+#undef _XOPEN_SOURCE
+
+#define _POSIX_C_SOURCE 2008'09L
+#define _XOPEN_SOURCE   700
+
 #include <stdio.h>
 #include <string.h>
 
-#include "acutest.h"
+#include "cread/test/acutest.h"
 
-#include "../src/FileBuf.h"
+#include "cread/src/FileBuf.h"
 
 #ifdef WITH_FREAD
     #define TESTME  fread
-    #include "../src/readlines_fread.h"
+    #include "cread/src/readlines_fread.h"
 #elifdef WITH_GETLINE
     #define TESTME  getline
-    #include "../src/readlines_getline.h"
+    #include "cread/src/readlines_getline.h"
 #elifdef WITH_MMAP_GETLINE
     #define TESTME  mmap_getline
-    #include "../src/readlines_getline.h"
-    #include "../src/readlines_mmap_getline.h"
+    #include "cread//src/readlines_getline.h"
+    #include "cread/src/readlines_mmap_getline.h"
 #elifdef WITH_MMAP_MEMCHR
     #define TESTME  mmap_memchr
-    #include "../src/readlines_mmap_memchr.h"
+    #include "cread/src/readlines_mmap_memchr.h"
 #elifdef WITH_READ
     #define TESTME  read
-    #include "../src/readlines_read.h"
+    #include "cread/src/readlines_read.h"
 #endif
 
 #define INDIRECT(x)     #x

@@ -13,12 +13,12 @@
 
 #include <sys/time.h>
 
-#include "FileBuf.h"
-#include "readlines_fread.h"
-#include "readlines_getline.h"
-#include "readlines_mmap_getline.h"
-#include "readlines_mmap_memchr.h"
-#include "readlines_read.h"
+#include "cread/src/FileBuf.h"
+#include "cread/src/readlines_fread.h"
+#include "cread/src/readlines_getline.h"
+#include "cread/src/readlines_mmap_getline.h"
+#include "cread/src/readlines_mmap_memchr.h"
+#include "cread/src/readlines_read.h"
 
 typedef uint64_t timestamp_t;
 

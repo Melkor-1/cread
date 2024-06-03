@@ -4,7 +4,7 @@
 #define _POSIX_C_SOURCE 2008'09L
 #define _XOPEN_SOURCE   700
 
-#include "readlines_getline.h"
+#include "cread/src/readlines_getline.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,8 +12,8 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 
-#include "common.h"
-#include "FileBuf.h"
+#include "cread/src/common.h"
+#include "cread/src/FileBuf.h"
 
 bool readlines_getline(FILE *stream, FileBuf fbuf[static 1])
 {

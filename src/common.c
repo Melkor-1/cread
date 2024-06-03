@@ -1,10 +1,10 @@
-#include "common.h"
+#include "cread/src/common.h"
 
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "FileBuf.h"
+#include "cread/src/FileBuf.h"
 
 /* If `cap` is less than 8, bumps it up to 8 and returns `true`.
  * Else it stores the result of `cap * 2` in `result`. 
