@@ -32,16 +32,13 @@
            "WITH_MMAP_GETLINE, WITH_MMAP_MEMCHR, or WITH_READ."
 #endif
 
-#define STRINGIFY_INDIRECT(x)   #x
-#define STRINGIFY(x)            STRINGIFY_INDIRECT(x)
+#define STRINGIFY_INDIRECT(x)       #x
+#define STRINGIFY(x)                STRINGIFY_INDIRECT(x)
 
-#define CONCAT_INDIRECT2(a, b)  a ## b 
-#define CONCAT2(a, b)           CONCAT_INDIRECT2(a, b)
+#define CONCAT_INDIRECT(a, b, c)    a ## b ## c
+#define CONCAT(a, b, c)             CONCAT_INDIRECT(a, b, c)
 
-#define CONCAT_INDIRECT3(a, b, c)   a ## b ## c
-#define CONCAT3(a, b, c)            CONCAT_INDIRECT3(a, b, c)
-
-void CONCAT3(test_, TESTME, _success)(void)
+void CONCAT(test_, TESTME, _success)(void)
 {
     /* The lines and line lengths are at most 1024 in sample1.txt. */
     char buf[1024];
@@ -73,6 +70,6 @@ void CONCAT3(test_, TESTME, _success)(void)
 }
 
 TEST_LIST = {
-    { "test_"  STRINGIFY(TESTME) "_success",  CONCAT3(test_, TESTME, _success) },
+    { "test_"  STRINGIFY(TESTME) "_success",  CONCAT(test_, TESTME, _success) },
     { nullptr, nullptr },
 };

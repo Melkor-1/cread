@@ -35,13 +35,10 @@
 #define STRINGIFY_INDIRECT(x)       #x
 #define STRINGIFY(x)                STRINGIFY_INDIRECT(x)
 
-#define CONCAT_INDIRECT2(a, b)      a ## b
-#define CONCAT2(a, b)               CONCAT_INDIRECT2(a, b)
+#define CONCAT_INDIRECT(a, b, c)    a ## b ## c
+#define CONCAT(a, b, c)             CONCAT_INDIRECT(a, b, c)
 
-#define CONCAT_INDIRECT3(a, b, c)   a ## b ## c
-#define CONCAT3(a, b, c)            CONCAT_INDIRECT3(a, b, c)
-
-void CONCAT3(test_, TESTME, _failure)(void)
+void CONCAT(test_, TESTME, _failure)(void)
 {
     FILE *const fp = fopen("test/stubs.c", "r");
     TEST_ASSERT(fp);
@@ -49,6 +46,6 @@ void CONCAT3(test_, TESTME, _failure)(void)
 }
 
 TEST_LIST = {
-    { "test_"  STRINGIFY(TESTME) "_failure",  CONCAT3(test_, TESTME, _failure) },
+    { "test_"  STRINGIFY(TESTME) "_failure",  CONCAT(test_, TESTME, _failure) },
     { nullptr, nullptr },
 };
