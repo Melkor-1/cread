@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -e 
+set -e
 
 RED=$(printf "\033[0;31m")
 ENDCOLOR=$(printf "\033[0m")
@@ -9,6 +9,13 @@ if [ "$USER" != "root" ]; then
 	printf "%sError: must be root! Exiting...%s\n" "$RED" "$ENDCOLOR" >&2
 	exit 1
 fi
+
+if [ $# != 1 ]; then
+    printf "%sError: executable name expected as first argument! Exiting...%s\n" "$RED" "$ENDCOLOR" >&2
+    exit 1
+fi
+
+executable="$1"
 
 drop_caches() 
 {
@@ -26,13 +33,15 @@ write_stats()
 
     printf "%s: L:%s W:%s %s\n" "$(basename "$file")" "$lines" "$words" "$size"
     drop_caches
-    printf "    %s getline\n" "$(./read_file --getline "$file")" 
+    printf "    %s fread\n" "$("$executable" --fread "$file")"
     drop_caches
-    printf "    %s mmap_getline\n" "$(./read_file --mmap_getline "$file")"
+    printf "    %s getline\n" "$("$executable" --getline "$file")" 
     drop_caches
-    printf "    %s mmap_memchr\n" "$(./read_file --mmap_memchr "$file")"
+    printf "    %s mmap_getline\n" "$("$executable" --mmap_getline "$file")"
     drop_caches
-    printf "    %s fread\n\n" "$(./read_file --fread "$file")"
+    printf "    %s mmap_memchr\n" "$("$executable" --mmap_memchr "$file")"
+    drop_caches
+    printf "    %s read\n\n" "$("$executable" --read "$file")"
 }
 
 for f in data/*; do
