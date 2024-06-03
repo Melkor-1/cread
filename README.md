@@ -162,7 +162,7 @@ of the read routines yet.
 To build the main test program, run:
 
 ```bash
-make
+make debug  # Or make release 
 ```
 
 To run the main program with all options under valgrind:
@@ -177,7 +177,9 @@ To generate the benchmarks:
 make benchmark
 ```
 
-Use [gen_files](gen_files) to generate the files in the `data` directory (that's what the benchmarking script expects). 
+Use [gen_files](gen_files) to generate the files in the `data` directory (that's
+what the benchmarking script expects). 
+
 The results are redirected to `"log.txt"`. Root priveleges may be required for this. 
 
 To run the tests:
