@@ -137,9 +137,8 @@ F_20: L:233854 W:231300 292M
 [gen_files](gen_files) was used to generate the files (a script borrowed from
 @CraigEstey on StackOverflow), and [benchmark](benchmark) 
 was used to benchmark each routine. Due to the large size, the `/data` directory
-that the [Makefile][Makefile] and [benchmakr](benchmark) expect is not present 
-in this repository. It should be trivial to replicate a similar or larger data-set
-given that the repository contains [gen_files](gen_files). 
+that [benchmark](benchmark) expect is not present in this repository. It should be trivial to
+replicate a similar (smaller or larger) data-set given [gen_files](gen_files). 
 
 The caches were flushed before each run with:
 
@@ -157,3 +156,32 @@ Memory: 454MiB / 2933MiB
 
 `readlines_read()` was added later and has not been benchmarked with the rest
 of the read routines yet.
+
+## Building
+
+To build the main test program, run:
+
+```bash
+make
+```
+
+To run the main program with all options under valgrind:
+
+```bash
+make valgrind
+```
+
+To generate the benchmarks:
+
+```bash
+make benchmark
+```
+
+Use [gen_files](gen_files) to generate the files in the `data` directory (that's what the benchmarking script expects). 
+The results are redirected to `"log.txt"`. Root priveleges may be required for this. 
+
+To run the tests:
+
+```bash
+make test
+```
